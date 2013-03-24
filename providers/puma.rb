@@ -22,7 +22,6 @@ action :before_restart do
   pidfile_path = ::File.join(new_resource.path, 'shared', 'tmp', 'pids', 'puma.pid')
   puma_config config_path do
     pidfile pidfile_path
-    state_path state_param_path
     bind new_resource.bind
     owner new_resource.user
   end
