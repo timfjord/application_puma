@@ -20,6 +20,12 @@ action :before_restart do
   current_path = ::File.join(new_resource.path, 'current')
   config_path = ::File.join(new_resource.path, 'shared', 'config', 'puma.rb')
   pidfile_path = ::File.join(new_resource.path, 'shared', 'tmp', 'pids', 'puma.pid')
+  
+  directory ::File.dirname(pidfile_path) do
+    recursive true
+    owner new_resource.user
+  end
+  
   puma_config config_path do
     pidfile pidfile_path
     bind new_resource.bind
