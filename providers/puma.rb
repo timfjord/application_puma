@@ -1,6 +1,13 @@
 include Chef::Mixin::LanguageIncludeRecipe
 
 action :before_compile do
+  unless new_resource.restart_command
+    new_resource.restart_command do
+      execute "monit restart puma_#{new_resource.name}" do
+        user "root"
+      end
+    end
+  end
 end
 
 action :before_deploy do
