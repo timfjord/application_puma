@@ -28,6 +28,8 @@ action :before_restart do
       bind new_resource.bind
       owner new_resource.user
       monit_timeout new_resource.monit_timeout
+      config_source new_resource.config_source
+      config_cookbook new_resource.config_cookbook
     end
   end
 end
