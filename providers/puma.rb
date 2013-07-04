@@ -3,7 +3,7 @@ include Chef::Mixin::LanguageIncludeRecipe
 action :before_compile do
   unless new_resource.restart_command
     new_resource.restart_command do
-      execute "monit restart puma_#{new_resource.name}" do
+      execute "monit restart #{new_resource.name}.puma" do
         user "root"
       end
     end
@@ -20,31 +20,14 @@ action :before_symlink do
 end
 
 action :before_restart do
-  include_recipe 'puma'
-  
   new_resource = @new_resource
   
-  current_path = ::File.join(new_resource.path, 'current')
-  config_path = ::File.join(new_resource.path, 'shared', 'config', 'puma.rb')
-  pidfile_path = ::File.join(new_resource.path, 'shared', 'tmp', 'pids', 'puma.pid')
-  
-  directory ::File.dirname(pidfile_path) do
-    recursive true
-    owner new_resource.user
-  end
-  
-  puma_config config_path do
-    pidfile pidfile_path
-    bind new_resource.bind
-    owner new_resource.user
-  end
-  
   with_context new_resource.application_provider.run_context do
-    puma_monit new_resource.name do
-      path current_path
-      pidfile pidfile_path
-      config config_path
-      user new_resource.user
+    puma_config new_resource.name do
+      directory new_resource.path
+      bind new_resource.bind
+      owner new_resource.user
+      monit_timeout new_resource.monit_timeout
     end
   end
 end
