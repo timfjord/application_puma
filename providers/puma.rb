@@ -30,6 +30,7 @@ action :before_restart do
       monit_timeout new_resource.monit_timeout
       config_source new_resource.config_source
       config_cookbook new_resource.config_cookbook
+      init_file new_resource.init_file
     end
   end
 end
