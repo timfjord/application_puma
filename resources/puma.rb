@@ -1,4 +1,4 @@
-include Chef::Resource::ApplicationBase
+include ApplicationCookbook::ResourceBase
 
 attribute :bind, kind_of: String, required: true
 attribute :user, kind_of: String
